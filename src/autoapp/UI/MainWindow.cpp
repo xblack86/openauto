@@ -129,6 +129,17 @@ MainWindow::MainWindow(configuration::IConfiguration::Pointer configuration, QWi
     connect(ui_->pushButtonAndroidAuto, &QPushButton::clicked, this, &MainWindow::setRetryUSBConnect);
     connect(ui_->pushButtonAndroidAuto2, &QPushButton::clicked, this, &MainWindow::TriggerAppStart);
     connect(ui_->pushButtonAndroidAuto2, &QPushButton::clicked, this, &MainWindow::setRetryUSBConnect);
+    
+    ui_->horizontalSliderVolume->hide();
+    ui_->volumeValueLabel->hide();
+    ui_->pushButtonUnMute->hide();
+    ui_->pushButtonMute->hide();
+    ui_->VolumeSliderControl->hide();
+    ui_->pushButtonVolume->hide();
+    ui_->pushButtonVolume2->hide();
+    ui_->pushButtonMusic->hide();
+    ui_->pushButtonMusic2->hide();
+    
 
     ui_->clockOnlyWidget->hide();
 
@@ -149,6 +160,8 @@ MainWindow::MainWindow(configuration::IConfiguration::Pointer configuration, QWi
     ui_->label_dummy_right->hide();
 
     ui_->dcRecording->hide();
+    
+    
 
     if (!configuration->showNetworkinfo()) {
         ui_->networkInfo->hide();
@@ -163,9 +176,9 @@ MainWindow::MainWindow(configuration::IConfiguration::Pointer configuration, QWi
         QString branch = configuration_->readFileContent("/etc/crankshaft.branch");
         if (branch != "crankshaft-ng") {
             if (branch == "csng-dev") {
-                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#5ce739;'>shaft </span><span style=' font-style:normal; color:#40bfbf;'>NG </span><span style=' font-style:normal; color:#888a85;'>- </span><span style=' font-style:normal; color:#cc0000;'>Dev-Build</span></p></body></html>");
+                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#5ce739;'>shaft </span><span style=' font-style:normal; color:#40bfbf;'>NG </span><span style=' font-style:normal; color:#888a85;'>- </span><span style=' font-style:normal; color:#cc0000;'>Dev-CONDOR</span></p></body></html>");
             } else {
-                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#5ce739;'>shaft </span><span style=' font-style:normal; color:#40bfbf;'>NG </span><span style=' font-style:normal; color:#888a85;'>- </span><span style=' font-style:normal; color:#ce5c00;'>Custom-Build</span></p></body></html>");
+                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#5ce739;'>shaft </span><span style=' font-style:normal; color:#888a85;'>- </span><span style=' font-style:normal; color:#40bfbf;'>CONDOR </span></p></body></html>");
             }
         }
     }
@@ -834,30 +847,24 @@ void f1x::openauto::autoapp::ui::MainWindow::updateAlpha()
 
 void f1x::openauto::autoapp::ui::MainWindow::switchGuiToNight()
 {
-    //MainWindow::on_pushButtonVolume_clicked();
+    //MainWindow::on_pushButtonBrightness_clicked();
     f1x::openauto::autoapp::ui::MainWindow::updateBG();
     ui_->pushButtonDay->show();
     ui_->pushButtonDay2->show();
     ui_->pushButtonNight->hide();
     ui_->pushButtonNight2->hide();
-    ui_->BrightnessSliderControl->hide();
-    if (ui_->mediaWidget->isVisible() == true) {
-        ui_->VolumeSliderControl->hide();
-    }
+
 }
 
 void f1x::openauto::autoapp::ui::MainWindow::switchGuiToDay()
 {
-    //MainWindow::on_pushButtonVolume_clicked();
+    //MainWindow::on_pushButtonBrightness_clicked();
     f1x::openauto::autoapp::ui::MainWindow::updateBG();
     ui_->pushButtonNight->show();
     ui_->pushButtonNight2->show();
     ui_->pushButtonDay->hide();
     ui_->pushButtonDay2->hide();
-    ui_->BrightnessSliderControl->hide();
-    if (ui_->mediaWidget->isVisible() == true) {
-        ui_->VolumeSliderControl->hide();
-    }
+
 }
 
 void f1x::openauto::autoapp::ui::MainWindow::cameraControlHide()
@@ -995,7 +1002,6 @@ void f1x::openauto::autoapp::ui::MainWindow::toggleGUI()
                 ui_->bigClock->hide();
             }
         }
-        MainWindow::on_pushButtonVolume_clicked();
     } else {
         ui_->menuWidget->show();
         ui_->oldmenuWidget->hide();
@@ -1004,8 +1010,12 @@ void f1x::openauto::autoapp::ui::MainWindow::toggleGUI()
             ui_->Digital_clock->show();
         }
     }
+    
+    
+    
     f1x::openauto::autoapp::ui::MainWindow::updateBG();
     f1x::openauto::autoapp::ui::MainWindow::tmpChanged();
+    ;
 }
 
 void f1x::openauto::autoapp::ui::MainWindow::updateBG()
@@ -1788,7 +1798,7 @@ void f1x::openauto::autoapp::ui::MainWindow::tmpChanged()
         }
         if (ui_->VolumeSliderControl->isVisible() == false) {
             if (ui_->mediaWidget->isVisible() == false) {
-                ui_->VolumeSliderControl->show();
+                ui_->VolumeSliderControl->hide();
             }
         }
         if (ui_->clockOnlyWidget->isVisible() == true) {
@@ -2176,5 +2186,16 @@ void f1x::openauto::autoapp::ui::MainWindow::tmpChanged()
             ui_->labelLockDummy->hide();
         }
     }
+    
+    ui_->horizontalSliderVolume->hide();
+    ui_->volumeValueLabel->hide();
+    ui_->pushButtonUnMute->hide();
+    ui_->pushButtonMute->hide();
+    ui_->VolumeSliderControl->hide();
+    ui_->pushButtonVolume->hide();
+    ui_->pushButtonVolume2->hide();
+    ui_->pushButtonMusic->hide();
+    ui_->pushButtonMusic2->hide();
+    
     updateNetworkInfo();
 }

@@ -80,7 +80,7 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     connect(ui_->pushButtonCheckNow, &QPushButton::clicked, [&]() { system("/usr/local/bin/crankshaft update check &"); });
     connect(ui_->pushButtonDebuglog, &QPushButton::clicked, this, &SettingsWindow::close);
     connect(ui_->pushButtonDebuglog, &QPushButton::clicked, [&]() { system("/usr/local/bin/crankshaft debuglog &");});
-    connect(ui_->pushButtonNetworkAuto, &QPushButton::clicked, [&]() { system("/usr/local/bin/crankshaft network auto &");});
+    //connect(ui_->pushButtonNetworkAuto, &QPushButton::clicked, [&]() { system("/usr/local/bin/crankshaft network auto &");});
     connect(ui_->pushButtonNetwork0, &QPushButton::clicked, this, &SettingsWindow::on_pushButtonNetwork0_clicked);
     connect(ui_->pushButtonNetwork1, &QPushButton::clicked, this, &SettingsWindow::on_pushButtonNetwork1_clicked);
     connect(ui_->pushButtonSambaStart, &QPushButton::clicked, [&]() { system("/usr/local/bin/crankshaft samba start &");});
@@ -96,8 +96,12 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     ui_->tab7->hide();
     ui_->tab8->hide();
     ui_->tab9->hide();
+    
 
-    ui_->horizontalGroupBox->hide();
+    //ui_->horizontalGroupBox->hide();
+    //ui_->labelSamba->hide();
+    //ui_->labelSambaStatus->hide();
+    //ui_->horizontalWidget->hide();
     ui_->labelBluetoothAdapterAddress->hide();
     ui_->lineEditExternalBluetoothAdapterAddress->hide();
     ui_->labelTestInProgress->hide();
@@ -113,6 +117,14 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     connect(ui_->pushButtonTab7, &QPushButton::clicked, this, &SettingsWindow::show_tab7);
     connect(ui_->pushButtonTab8, &QPushButton::clicked, this, &SettingsWindow::show_tab8);
     connect(ui_->pushButtonTab9, &QPushButton::clicked, this, &SettingsWindow::show_tab9);
+    
+    ui_->pushButtonTab9->hide();
+    ui_->pushButtonTab8->hide();
+    ui_->pushButtonTab7->hide();
+    ui_->pushButtonTab6->hide();
+    ui_->pushButtonTab3->hide();
+    ui_->groupBoxMediaPlayer->hide();
+    //ui_->groupBoxResolution->hide();
 
     QTime time=QTime::currentTime();
     QString time_text_hour=time.toString("hh");
@@ -139,7 +151,7 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     if (!std::ifstream("/boot/crankshaft/network0.conf") && !std::ifstream("/boot/crankshaft/network1.conf")) {
         ui_->pushButtonNetwork0->hide();
         ui_->pushButtonNetwork1->hide();
-        ui_->pushButtonNetworkAuto->hide();
+        //ui_->pushButtonNetworkAuto->hide();
         ui_->label_notavailable->show();
     }
 
@@ -239,15 +251,29 @@ void SettingsWindow::onSave()
 
     if(ui_->radioButtonDisableBluetooth->isChecked())
     {
+        // set bluetooth
+        if (configuration_->getCSValue("ENABLE_BLUETOOTH") == "1") {
+                    system("/usr/local/bin/crankshaft bluetooth disable");
+        }
         configuration_->setBluetoothAdapterType(configuration::BluetoothAdapterType::NONE);
+        
     }
     else if(ui_->radioButtonUseLocalBluetoothAdapter->isChecked())
     {
+        // set bluetooth
+        if (configuration_->getCSValue("ENABLE_BLUETOOTH") == "0" || configuration_->getCSValue("EXTERNAL_BLUETOOTH") == "1") {
+            system("/usr/local/bin/crankshaft bluetooth builtin");
+        }
         configuration_->setBluetoothAdapterType(configuration::BluetoothAdapterType::LOCAL);
+        
     }
     else if(ui_->radioButtonUseExternalBluetoothAdapter->isChecked())
     {
+        if (configuration_->getCSValue("ENABLE_BLUETOOTH") == "0" || configuration_->getCSValue("EXTERNAL_BLUETOOTH") == "0") {
+            system("/usr/local/bin/crankshaft bluetooth external");
+        }
         configuration_->setBluetoothAdapterType(configuration::BluetoothAdapterType::REMOTE);
+        
     }
 
     configuration_->setBluetoothRemoteAdapterAddress(ui_->lineEditExternalBluetoothAdapterAddress->text().toStdString());
@@ -1108,7 +1134,7 @@ void SettingsWindow::onStartHotspot()
     ui_->radioButtonHotspot->setEnabled(0);
     ui_->lineEdit_wlan0->setText("");
     ui_->lineEditWifiSSID->setText("");
-    ui_->pushButtonNetworkAuto->hide();
+    //ui_->pushButtonNetworkAuto->hide();
     qApp->processEvents();
     std::remove("/tmp/manual_hotspot_control");
     std::ofstream("/tmp/manual_hotspot_control");
@@ -1125,7 +1151,7 @@ void SettingsWindow::onStopHotspot()
     ui_->lineEdit_wlan0->setText("");
     ui_->lineEditWifiSSID->setText("");
     ui_->lineEditPassword->setText("");
-    ui_->pushButtonNetworkAuto->hide();
+    //ui_->pushButtonNetworkAuto->hide();
     qApp->processEvents();
     system("/opt/crankshaft/service_hotspot.sh stop &");
 }
@@ -1364,7 +1390,7 @@ void f1x::openauto::autoapp::ui::SettingsWindow::updateNetworkInfo()
             ui_->label_password->show();
             ui_->lineEditPassword->setText(configuration_->getParamFromFile("/etc/hostapd/hostapd.conf","wpa_passphrase"));
             ui_->clientNetworkSelect->hide();
-            ui_->pushButtonNetworkAuto->hide();
+            //ui_->pushButtonNetworkAuto->hide();
             ui_->label_notavailable->show();
         } else {
             ui_->radioButtonClient->setEnabled(1);
@@ -1378,7 +1404,7 @@ void f1x::openauto::autoapp::ui::SettingsWindow::updateNetworkInfo()
             ui_->lineEditPassword->setText("");
             ui_->clientNetworkSelect->show();
             ui_->label_notavailable->hide();
-            ui_->pushButtonNetworkAuto->show();
+            //ui_->pushButtonNetworkAuto->show();
 
             if (!std::ifstream("/boot/crankshaft/network1.conf")) {
                 ui_->pushButtonNetwork1->hide();
@@ -1391,7 +1417,7 @@ void f1x::openauto::autoapp::ui::SettingsWindow::updateNetworkInfo()
             if (!std::ifstream("/boot/crankshaft/network0.conf") && !std::ifstream("/boot/crankshaft/network1.conf")) {
                 ui_->pushButtonNetwork0->hide();
                 ui_->pushButtonNetwork1->hide();
-                ui_->pushButtonNetworkAuto->hide();
+                //ui_->pushButtonNetworkAuto->hide();
                 ui_->label_notavailable->show();
             }
         }
