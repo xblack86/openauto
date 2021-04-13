@@ -106,7 +106,7 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     ui_->labelBluetoothAdapterAddress->hide();
     ui_->lineEditExternalBluetoothAdapterAddress->hide();
     ui_->labelTestInProgress->hide();
-    ui_->groupBoxGUI->hide;
+    //ui_->groupBoxGUI->hide;
 
     connect(ui_->pushButtonTab1, &QPushButton::clicked, this, &SettingsWindow::show_tab1);
     connect(ui_->pushButtonTab2, &QPushButton::clicked, this, &SettingsWindow::show_tab2);
