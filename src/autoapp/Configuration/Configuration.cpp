@@ -154,9 +154,9 @@ void Configuration::load()
 void Configuration::reset()
 {
     handednessOfTrafficType_ = HandednessOfTrafficType::LEFT_HAND_DRIVE;
-    showClock_ = true;
+    showClock_ = false;
     showBigClock_ = false;
-    oldGUI_ = false;
+    oldGUI_ = true;
     alphaTrans_ = 50;
     hideMenuToggle_ = false;
     hideAlpha_ = false;
@@ -181,8 +181,8 @@ void Configuration::reset()
     buttonCodes_.clear();
     bluetoothAdapterType_ = BluetoothAdapterType::NONE;
     bluetoothRemoteAdapterAddress_ = "";
-    musicAudioChannelEnabled_ = true;
-    speechAudiochannelEnabled_ = true;
+    musicAudioChannelEnabled_ = false;
+    speechAudiochannelEnabled_ = false;
     audioOutputBackendType_ = AudioOutputBackendType::QT;
 }
 

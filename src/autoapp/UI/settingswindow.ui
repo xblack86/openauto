@@ -439,7 +439,7 @@ outline: none;
               <string>Show clock</string>
              </property>
              <property name="checked">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -453,6 +453,9 @@ outline: none;
              </property>
              <property name="text">
               <string>Start with classic gui</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -1640,7 +1643,7 @@ QSlider::groove:horizontal { background: #6d6d6d; height: 32px;}</string>
                   <string>Speech channel</string>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -1650,7 +1653,7 @@ QSlider::groove:horizontal { background: #6d6d6d; height: 32px;}</string>
                   <string>Music channel</string>
                  </property>
                  <property name="checked">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>

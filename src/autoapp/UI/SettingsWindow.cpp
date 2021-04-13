@@ -85,6 +85,7 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     connect(ui_->pushButtonNetwork1, &QPushButton::clicked, this, &SettingsWindow::on_pushButtonNetwork1_clicked);
     connect(ui_->pushButtonSambaStart, &QPushButton::clicked, [&]() { system("/usr/local/bin/crankshaft samba start &");});
     connect(ui_->pushButtonSambaStop, &QPushButton::clicked, [&]() { system("/usr/local/bin/crankshaft samba stop &");});
+    
 
     // menu
     ui_->tab1->show();
@@ -105,6 +106,7 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     ui_->labelBluetoothAdapterAddress->hide();
     ui_->lineEditExternalBluetoothAdapterAddress->hide();
     ui_->labelTestInProgress->hide();
+    ui_->groupBoxGUI->hide;
 
     connect(ui_->pushButtonTab1, &QPushButton::clicked, this, &SettingsWindow::show_tab1);
     connect(ui_->pushButtonTab2, &QPushButton::clicked, this, &SettingsWindow::show_tab2);
@@ -175,7 +177,7 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
         ui_->label_notavailable->show();
     }
 
-    if (std::ifstream("/tmp/samba_running")) {
+    /*if (std::ifstream("/tmp/samba_running")) {
         ui_->labelSambaStatus->setText("running");
         ui_->pushButtonSambaStart->hide();
         ui_->pushButtonSambaStop->show();
@@ -183,7 +185,11 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
         ui_->labelSambaStatus->setText("stopped");
         ui_->pushButtonSambaStop->hide();
         ui_->pushButtonSambaStart->show();
-    }
+    }*/
+    ui_->labelSamba->hide();
+    ui_->labelSambaStatus->hide();
+    ui_->pushButtonSambaStart->hide();
+    ui_->pushButtonSambaStop->hide();
 
     QTimer *refresh=new QTimer(this);
     connect(refresh, SIGNAL(timeout()),this,SLOT(updateInfo()));
