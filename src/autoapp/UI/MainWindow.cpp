@@ -176,9 +176,9 @@ MainWindow::MainWindow(configuration::IConfiguration::Pointer configuration, QWi
         QString branch = configuration_->readFileContent("/etc/crankshaft.branch");
         if (branch != "crankshaft-ng") {
             if (branch == "csng-dev") {
-                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#5ce739;'>shaft </span><span style=' font-style:normal; color:#40bfbf;'>NG </span><span style=' font-style:normal; color:#888a85;'>- </span><span style=' font-style:normal; color:#cc0000;'>Dev-CONDOR</span></p></body></html>");
+                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#ffffff;'>shaft </span><span style=' font-style:normal; color:#ffffff;'>- </span><span style=' font-style:normal; color:#ffffff;'>Dev-CONDOR</span></p></body></html>");
             } else {
-                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#5ce739;'>shaft </span><span style=' font-style:normal; color:#888a85;'>- </span><span style=' font-style:normal; color:#40bfbf;'>CONDOR </span></p></body></html>");
+                ui_->Header_Label->setText("<html><head/><body><p><span style=' font-style:normal; color:#ffffff;'>crank</span><span style=' font-style:normal; color:#ffffff;'>shaft </span><span style=' font-style:normal; color:#ffffff;'>- </span><span style=' font-style:normal; color:#ffffff;'>CONDOR </span></p></body></html>");
             }
         }
     }
