@@ -184,31 +184,26 @@ void SettingsWindow::onSave()
     // generate param string for autoapp_helper
     std::string params;
     
-    if (ui_->checkBoxHotspot->isChecked()) {
+    if (ui_->checkBoxHotspot->isChecked()) {//1
         params.append("1");
     } else {
         params.append("0");
     }
     params.append("#");
-    if (ui_->checkBoxBluetoothAutoPair->isChecked()) {
+    if (ui_->checkBoxBluetoothAutoPair->isChecked()) {//2
         params.append("1");
     } else {
         params.append("0");
     }
     params.append("#");
-    params.append( std::string(ui_->comboBoxBluetooth->currentText().toStdString()) );
+    params.append( std::string(ui_->comboBoxBluetooth->currentText().toStdString()) );//3
+
     params.append("#");
-    if (ui_->checkBoxHardwareSave->isChecked()) {
-        params.append("1");
-    } else {
-        params.append("0");
-    }
+    params.append( std::to_string(ui_->horizontalSliderDay->value()) );//4
     params.append("#");
-    params.append( std::to_string(ui_->horizontalSliderDay->value()) );
+    params.append( std::to_string(ui_->horizontalSliderNight->value()) );//5
     params.append("#");
-    params.append( std::to_string(ui_->horizontalSliderNight->value()) );
-    params.append("#");
-    params.append( std::string(ui_->comboBoxCountryCode->currentText().split("|")[0].replace(" ","").toStdString()) );
+    params.append( std::string(ui_->comboBoxCountryCode->currentText().split("|")[0].replace(" ","").toStdString()) );//6
     params.append("#");
     system((std::string("/usr/local/bin/autoapp_helper setparams#") + std::string(params) + std::string(" &") ).c_str());
 
