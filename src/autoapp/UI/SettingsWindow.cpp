@@ -309,18 +309,7 @@ void SettingsWindow::loadSystemValues()
         } else {
             ui_->checkBoxBluetoothAutoPair->setChecked(false);
         }
-        // set bluetooth type
-        if (configuration_->getCSValue("ENABLE_BLUETOOTH") == "1") {
-            QString bt = configuration_->getParamFromFile("/boot/config.txt","dtoverlay=pi3-disable-bt");
-            if (bt.contains("pi3-disable-bt")) {
-                ui_->comboBoxBluetooth->setCurrentText("external");
-            } else {
-                ui_->comboBoxBluetooth->setCurrentText("builtin");
-            }
-        } else {
-            ui_->comboBoxBluetooth->setCurrentText("none");
-        }
-
+        
         // wifi country code
         ui_->comboBoxCountryCode->setCurrentIndex(ui_->comboBoxCountryCode->findText(configuration_->getCSValue("WIFI_COUNTRY"), Qt::MatchFlag::MatchStartsWith));
     }
