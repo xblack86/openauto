@@ -65,7 +65,6 @@ private slots:
     void updateNetworkInfo();
     void on_pushButtonNetwork0_clicked();
     void on_pushButtonNetwork1_clicked();
-    void updateSystemInfo();
     void updateInfo();
 
 public slots:
