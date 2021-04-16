@@ -55,8 +55,6 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
     connect(ui_->radioButtonUseExternalBluetoothAdapter, &QRadioButton::clicked, [&](bool checked) { ui_->lineEditExternalBluetoothAdapterAddress->setEnabled(checked); });
     connect(ui_->radioButtonDisableBluetooth, &QRadioButton::clicked, [&]() { ui_->lineEditExternalBluetoothAdapterAddress->setEnabled(false); });
     connect(ui_->radioButtonUseLocalBluetoothAdapter, &QRadioButton::clicked, [&]() { ui_->lineEditExternalBluetoothAdapterAddress->setEnabled(false); });
-    connect(ui_->pushButtonClearSelection, &QPushButton::clicked, std::bind(&SettingsWindow::setButtonCheckBoxes, this, false));
-    connect(ui_->pushButtonSelectAll, &QPushButton::clicked, std::bind(&SettingsWindow::setButtonCheckBoxes, this, true));
     connect(ui_->pushButtonResetToDefaults, &QPushButton::clicked, this, &SettingsWindow::onResetToDefaults);
     connect(ui_->radioButtonHotspot, &QPushButton::clicked, this, &SettingsWindow::onStartHotspot);
     connect(ui_->radioButtonClient, &QPushButton::clicked, this, &SettingsWindow::onStopHotspot);
@@ -71,7 +69,6 @@ SettingsWindow::SettingsWindow(configuration::IConfiguration::Pointer configurat
      
     ui_->labelBluetoothAdapterAddress->hide();
     ui_->lineEditExternalBluetoothAdapterAddress->hide();
-    ui_->labelTestInProgress->hide();
 
     connect(ui_->pushButtonTab1, &QPushButton::clicked, this, &SettingsWindow::show_tab1);
     connect(ui_->pushButtonTab2, &QPushButton::clicked, this, &SettingsWindow::show_tab2);
@@ -196,14 +193,11 @@ void SettingsWindow::onSave()
         params.append("0");
     }
     params.append("#");
-    params.append( std::string(ui_->comboBoxBluetooth->currentText().toStdString()) );//3
-
+    params.append( std::to_string(ui_->horizontalSliderDay->value()) );//3
     params.append("#");
-    params.append( std::to_string(ui_->horizontalSliderDay->value()) );//4
+    params.append( std::to_string(ui_->horizontalSliderNight->value()) );//4
     params.append("#");
-    params.append( std::to_string(ui_->horizontalSliderNight->value()) );//5
-    params.append("#");
-    params.append( std::string(ui_->comboBoxCountryCode->currentText().split("|")[0].replace(" ","").toStdString()) );//6
+    params.append( std::string(ui_->comboBoxCountryCode->currentText().split("|")[0].replace(" ","").toStdString()) );//5
     params.append("#");
     system((std::string("/usr/local/bin/autoapp_helper setparams#") + std::string(params) + std::string(" &") ).c_str());
 
@@ -383,31 +377,9 @@ void SettingsWindow::show_tab2()
 }
 }
 
-void f1x::openauto::autoapp::ui::SettingsWindow::on_pushButtonAudioTest_clicked()
-{
-    ui_->labelTestInProgress->show();
-    ui_->pushButtonAudioTest->hide();
-    qApp->processEvents();
-    system("/usr/local/bin/crankshaft audio test");
-    ui_->pushButtonAudioTest->show();
-    ui_->labelTestInProgress->hide();
-}
 
 void f1x::openauto::autoapp::ui::SettingsWindow::updateNetworkInfo()
 {
-    if (std::ifstream("/tmp/samba_running")) {
-        ui_->labelSambaStatus->setText("running");
-        if (ui_->pushButtonSambaStart->isVisible() == true) {
-            ui_->pushButtonSambaStart->hide();
-            ui_->pushButtonSambaStop->show();
-        }
-    } else {
-        ui_->labelSambaStatus->setText("stopped");
-        if (ui_->pushButtonSambaStop->isVisible() == true) {
-            ui_->pushButtonSambaStop->hide();
-            ui_->pushButtonSambaStart->show();
-        }
-    }
 
     if (!std::ifstream("/tmp/mode_change_progress")) {
         QNetworkInterface eth0if = QNetworkInterface::interfaceFromName("eth0");
