@@ -37,7 +37,6 @@ private slots:
     void on_pushButtonUpdateCsmt_clicked();
     void on_pushButtonUpdateUdev_clicked();
     void on_pushButtonUpdateOpenauto_clicked();
-    void on_pushButtonUpdateSystem_clicked();
     void on_pushButtonUpdateCheck_clicked();
     void on_pushButtonUpdateCancel_clicked();
 
