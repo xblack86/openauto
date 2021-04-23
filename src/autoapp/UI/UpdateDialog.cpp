@@ -23,7 +23,6 @@ UpdateDialog::UpdateDialog(QWidget *parent)
     connect(ui_->pushButtonUpdateCsmt, &QPushButton::clicked, this, &UpdateDialog::on_pushButtonUpdateCsmt_clicked);
     connect(ui_->pushButtonUpdateUdev, &QPushButton::clicked, this, &UpdateDialog::on_pushButtonUpdateUdev_clicked);
     connect(ui_->pushButtonUpdateOpenauto, &QPushButton::clicked, this, &UpdateDialog::on_pushButtonUpdateOpenauto_clicked);
-    connect(ui_->pushButtonUpdateSystem, &QPushButton::clicked, this, &UpdateDialog::on_pushButtonUpdateSystem_clicked);
     connect(ui_->pushButtonUpdateCheck, &QPushButton::clicked, this, &UpdateDialog::on_pushButtonUpdateCheck_clicked);
     connect(ui_->pushButtonUpdateCancel, &QPushButton::clicked, this, &UpdateDialog::on_pushButtonUpdateCancel_clicked);
     connect(ui_->pushButtonClose, &QPushButton::clicked, this, &UpdateDialog::close);
@@ -32,8 +31,6 @@ UpdateDialog::UpdateDialog(QWidget *parent)
     ui_->progressBarCsmt->hide();
     ui_->progressBarUdev->hide();
     ui_->progressBarOpenauto->hide();
-    ui_->progressBarSystem->hide();
-    ui_->labelSystemReadyInstall->hide();
     ui_->labelUpdateChecking->hide();
     ui_->pushButtonUpdateCancel->hide();
     updateCheck();
@@ -42,19 +39,6 @@ UpdateDialog::UpdateDialog(QWidget *parent)
     watcher_tmp->addPath("/tmp");
     connect(watcher_tmp, &QFileSystemWatcher::directoryChanged, this, &UpdateDialog::updateCheck);
 
-    watcher_download = new QFileSystemWatcher(this);
-    watcher_download->addPath("/media/USBDRIVES/CSSTORAGE");
-    connect(watcher_download, &QFileSystemWatcher::directoryChanged, this, &UpdateDialog::downloadCheck);
-
-    QStorageInfo storage("/media/USBDRIVES/CSSTORAGE");
-    storage.refresh();
-    if (storage.isValid() && storage.isReady()) {
-        ui_->system->show();
-        ui_->labelNoStorage->hide();
-    } else {
-        ui_->labelNoStorage->show();
-        ui_->system->hide();
-    }
 }
 
 UpdateDialog::~UpdateDialog()
@@ -86,14 +70,7 @@ void f1x::openauto::autoapp::ui::UpdateDialog::on_pushButtonUpdateOpenauto_click
     system("crankshaft update openauto &");
 }
 
-void f1x::openauto::autoapp::ui::UpdateDialog::on_pushButtonUpdateSystem_clicked()
-{
-    ui_->pushButtonUpdateSystem->hide();
-    ui_->progressBarSystem->show();
-    ui_->progressBarSystem->setValue(0);
-    qApp->processEvents();
-    system("crankshaft update system &");
-}
+
 
 void f1x::openauto::autoapp::ui::UpdateDialog::on_pushButtonUpdateCheck_clicked()
 {
@@ -161,46 +138,6 @@ void f1x::openauto::autoapp::ui::UpdateDialog::updateCheck()
         ui_->pushButtonUpdateOpenauto->hide();
     }
 
-    if (std::ifstream("/tmp/system_update_ready")) {
-        ui_->labelSystemOK->hide();
-        ui_->pushButtonUpdateSystem->hide();
-        ui_->progressBarSystem->hide();
-        ui_->labelSystemReadyInstall->show();
-        ui_->pushButtonUpdateCancel->hide();
-    } else {
-        ui_->labelSystemReadyInstall->hide();
-        if (std::ifstream("/tmp/system_update_available")) {
-            ui_->labelSystemOK->hide();
-            ui_->progressBarSystem->hide();
-            ui_->pushButtonUpdateSystem->show();
-        }
-        if (std::ifstream("/tmp/system_update_downloading")) {
-            ui_->labelSystemOK->hide();
-            ui_->pushButtonUpdateSystem->hide();
-            ui_->pushButtonUpdateCheck->hide();
-            ui_->progressBarSystem->show();
-            ui_->pushButtonUpdateCancel->show();
-
-            QFileInfo downloadfile = "/media/USBDRIVES/CSSTORAGE/" + ui_->labelDownload->text();
-            if (downloadfile.exists()) {
-                qint64 size = downloadfile.size();
-                size = size/1024/1024;
-                ui_->progressBarSystem->setValue(size);
-            }
-        } else {
-            if (ui_->pushButtonUpdateCheck->isVisible() == false) {
-                ui_->pushButtonUpdateCheck->show();
-                ui_->labelDownload->setText("");
-                ui_->pushButtonUpdateCancel->hide();
-            }
-        }
-
-        if (!std::ifstream("/tmp/system_update_available") && !std::ifstream("/tmp/system_update_downloading")) {
-            ui_->progressBarSystem->hide();
-            ui_->labelSystemOK->show();
-            ui_->pushButtonUpdateSystem->hide();
-        }
-    }
 }
 
 void f1x::openauto::autoapp::ui::UpdateDialog::keyPressEvent(QKeyEvent *event)
